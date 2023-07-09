@@ -1,5 +1,4 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { VehicleMake } from "@/types/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { env } from "process";
 
@@ -9,7 +8,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log("key: ", env.CARBON_API_KEY);
+  console.log("key: ", process.env.CARBON_API_KEY);
   const data = await fetch(
     "https://www.carboninterface.com/api/v1/vehicle_makes",
     {
@@ -20,14 +19,12 @@ export default async function handler(
       //   // vehicle_model_id: req.body.vehicle_model_id,
       // }),
       headers: {
-        Authorization: `Bearer ${env.CARBON_API_KEY}`,
+        Authorization: `Bearer ${process.env.CARBON_API_KEY}`,
         "Content-Type": "application/json",
       },
       method: "GET",
     }
   );
-  const test = data.json();
-  console.log("server side data: ", data.body);
-  console.log("de jsond: ", test);
-  res.status(data.status).send(data);
+  const responseData = await data.json();
+  res.status(data.status).send(responseData);
 }
