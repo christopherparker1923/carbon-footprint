@@ -20,3 +20,23 @@ export type VehicleModel = {
     };
   };
 };
+
+export type VehicleEstimate = {
+  data: {
+    id: String;
+    type: String;
+    attributes: {
+      distance_value: Number;
+      vehicle_make: String;
+      vehicle_model: String;
+      vehicle_year: Number;
+      vehicle_model_id: String;
+      distance_unit: String;
+      estimated_at: String;
+      carbon_g: Number;
+      carbon_lb: Number;
+      carbon_kg: Number;
+      carbon_mt: Number;
+    };
+  };
+};
