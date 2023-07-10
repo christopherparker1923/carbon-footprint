@@ -40,3 +40,11 @@ export type VehicleEstimate = {
     };
   };
 };
+
+export type ReformatModels = {
+  [model: string]: SelectedCar;
+};
+
+export type SelectedCar = {
+  [year: string]: string;
+};
