@@ -24,6 +24,7 @@ import { Slider } from "@/components/SliderOut";
 // add variable for estimatee return value
 // refactor state
 // refatcor components
+// use loadings to add loading circles
 
 const AVG_CO2_KG = 4600;
 
