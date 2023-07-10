@@ -455,7 +455,7 @@ export default function Home() {
               {vehicleEstimate && (
                 <div className="mt-5 relative">
                   <p>
-                    {`Your annual carbon emmissions are: ${vehicleEstimate?.data.attributes.carbon_kg} kg`}
+                    {`Your annual carbon emissions are: ${vehicleEstimate?.data.attributes.carbon_kg} kg`}
                   </p>
                   <Slider
                     className="bg-gradient-to-r"
@@ -482,7 +482,7 @@ export default function Home() {
                     className={`absolute flex flex-col`}
                   >
                     <span>^</span>
-                    <span className="relative right-1/2 ">{`Average: ${AVG_CO2_KG}`}</span>
+                    <span className="relative right-1/2 ">{`Average: ${AVG_CO2_KG} kg`}</span>
                   </div>
                 </div>
               )}
