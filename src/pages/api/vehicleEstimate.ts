@@ -10,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const data = await fetch("https://pokeapi.co/api/v2/pokemon/ditto", {
+  const data = await fetch("https://www.carboninterface.com/api/v1/estimates", {
     body: JSON.stringify({
       type: req.body.type,
       distance_unit: req.body.distance_unit,
@@ -24,5 +24,6 @@ export default async function handler(
     method: "POST",
   });
 
-  res.status(200).send(data);
+  const responseData = await data.json();
+  res.status(200).send(responseData);
 }

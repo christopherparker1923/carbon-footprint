@@ -25,6 +25,7 @@ export default async function handler(
       method: "GET",
     }
   );
+
   const responseData = await data.json();
   res.status(data.status).send(responseData);
 }

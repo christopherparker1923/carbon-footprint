@@ -1,8 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { VehicleModel } from "@/types/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { env } from "process";
-
-//config();
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,5 +20,6 @@ export default async function handler(
     }
   );
   const responseData = await data.json();
+
   res.status(data.status).send(responseData);
 }

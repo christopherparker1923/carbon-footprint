@@ -1,42 +1,42 @@
 export type VehicleMake = {
   data: {
-    id: String;
-    type: String;
+    id: string;
+    type: string;
     attributes: {
-      name: String;
-      number_of_models: Number;
+      name: string;
+      number_of_models: number;
     };
   };
 };
 
 export type VehicleModel = {
   data: {
-    id: String;
-    type: String;
+    id: string;
+    type: string;
     attributes: {
-      name: String;
-      year: Number;
-      vehicle_make: String;
+      name: string;
+      year: number;
+      vehicle_make: string;
     };
   };
 };
 
 export type VehicleEstimate = {
   data: {
-    id: String;
-    type: String;
+    id: string;
+    type: string;
     attributes: {
-      distance_value: Number;
-      vehicle_make: String;
-      vehicle_model: String;
-      vehicle_year: Number;
-      vehicle_model_id: String;
-      distance_unit: String;
-      estimated_at: String;
-      carbon_g: Number;
-      carbon_lb: Number;
-      carbon_kg: Number;
-      carbon_mt: Number;
+      distance_value: number;
+      vehicle_make: string;
+      vehicle_model: string;
+      vehicle_year: number;
+      vehicle_model_id: string;
+      distance_unit: string;
+      estimated_at: string;
+      carbon_g: number;
+      carbon_lb: number;
+      carbon_kg: number;
+      carbon_mt: number;
     };
   };
 };
