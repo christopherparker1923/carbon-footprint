@@ -10,6 +10,7 @@ import { useState, useEffect, Fragment, Key } from "react";
 import { Listbox, Transition, RadioGroup } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Slider } from "@/components/SliderOut";
+import { DropdownOption } from "@/components/DropdownOption";
 
 // import evergreen from "./../assets/evergreens.jpg";
 
@@ -30,6 +31,7 @@ import { Slider } from "@/components/SliderOut";
 // use loadings to add loading circles
 
 const AVG_CO2_KG = 4600;
+const AVG_CO2_KG_X2 = 2 * AVG_CO2_KG;
 
 export default function Home() {
   const [vehicleMakes, setVehicleMakes] = useState<VehicleMake[]>();
@@ -170,26 +172,75 @@ export default function Home() {
                 fetchVehicleEstimate();
               }}
             >
-              <div>
+              <Listbox
+                value={selectedMake}
+                onChange={(e) => {
+                  setSelectedYear("");
+                  setSelectedModel("");
+                  setVehicleModels({});
+                  setSelectedMake(e);
+                }}
+              >
+                {({ open }) => (
+                  <>
+                    <Listbox.Label className="block text-sm font-medium leading-6 text-slate-700 dark:text-slate-300">
+                      Vehicle Make
+                    </Listbox.Label>
+                    <div className="relative mt-2">
+                      <Listbox.Button className="dark:bg-slate-200 h-10 relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
+                        <span className="flex items-center">
+                          <span className="ml-3 block truncate">
+                            {selectedMake?.data.attributes.name}
+                          </span>
+                        </span>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                          <ChevronUpDownIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </Listbox.Button>
+
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                          {vehicleMakes.map((make) => (
+                            <DropdownOption
+                              key={make.data.id as Key}
+                              value={make}
+                              label={make.data.attributes.name}
+                            />
+                          ))}
+                        </Listbox.Options>
+                      </Transition>
+                    </div>
+                  </>
+                )}
+              </Listbox>
+
+              {selectedMake && vehicleModels && (
                 <Listbox
-                  value={selectedMake}
+                  value={selectedModel}
                   onChange={(e) => {
                     setSelectedYear("");
-                    setSelectedModel("");
-                    setVehicleModels({});
-                    setSelectedMake(e);
+                    setSelectedModel(e);
                   }}
                 >
                   {({ open }) => (
                     <>
                       <Listbox.Label className="block text-sm font-medium leading-6 text-slate-700 dark:text-slate-300">
-                        Vehicle Make
+                        Vehicle Model
                       </Listbox.Label>
                       <div className="relative mt-2">
                         <Listbox.Button className="dark:bg-slate-200 h-10 relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
                           <span className="flex items-center">
                             <span className="ml-3 block truncate">
-                              {selectedMake?.data.attributes.name}
+                              {selectedModel ? selectedModel : ""}
                             </span>
                           </span>
                           <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -208,49 +259,12 @@ export default function Home() {
                           leaveTo="opacity-0"
                         >
                           <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                            {vehicleMakes.map((make) => (
-                              <Listbox.Option
-                                key={make.data.id as Key}
-                                className={({ active }) =>
-                                  `${
-                                    active
-                                      ? "bg-indigo-600 text-white"
-                                      : "text-gray-900"
-                                  } relative cursor-default select-none py-2 pl-3 pr-9`
-                                }
-                                value={make}
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <div className="flex items-center">
-                                      <span
-                                        className={`${
-                                          selected
-                                            ? "font-semibold"
-                                            : "font-normal"
-                                        } ml-3 block truncate`}
-                                      >
-                                        {make.data.attributes.name}
-                                      </span>
-                                    </div>
-
-                                    {selected ? (
-                                      <span
-                                        className={`${
-                                          active
-                                            ? "text-white"
-                                            : "text-indigo-600"
-                                        } absolute inset-y-0 right-0 flex items-center pr-4`}
-                                      >
-                                        <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    ) : null}
-                                  </>
-                                )}
-                              </Listbox.Option>
+                            {Object.keys(vehicleModels).map((model) => (
+                              <DropdownOption
+                                key={model as Key}
+                                value={model}
+                                label={model}
+                              />
                             ))}
                           </Listbox.Options>
                         </Transition>
@@ -258,180 +272,52 @@ export default function Home() {
                     </>
                   )}
                 </Listbox>
-              </div>
-              {selectedMake && vehicleModels && (
-                <div>
-                  <Listbox
-                    value={selectedModel}
-                    onChange={(e) => {
-                      setSelectedYear("");
-                      setSelectedModel(e);
-                    }}
-                  >
-                    {({ open }) => (
-                      <>
-                        <Listbox.Label className="block text-sm font-medium leading-6 text-slate-700 dark:text-slate-300">
-                          Vehicle Model
-                        </Listbox.Label>
-                        <div className="relative mt-2">
-                          <Listbox.Button className="dark:bg-slate-200 h-10 relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
-                            <span className="flex items-center">
-                              <span className="ml-3 block truncate">
-                                {selectedModel ? selectedModel : ""}
-                              </span>
-                            </span>
-                            <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                              <ChevronUpDownIcon
-                                className="h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </Listbox.Button>
-
-                          <Transition
-                            show={open}
-                            as={Fragment}
-                            leave="transition ease-in duration-100"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                          >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                              {Object.keys(vehicleModels).map((model) => (
-                                <Listbox.Option
-                                  key={model as Key}
-                                  className={({ active }) =>
-                                    `${
-                                      active
-                                        ? "bg-indigo-600 text-white"
-                                        : "text-gray-900"
-                                    } relative cursor-default select-none py-2 pl-3 pr-9`
-                                  }
-                                  value={model}
-                                >
-                                  {({ selected, active }) => (
-                                    <>
-                                      <div className="flex items-center">
-                                        <span
-                                          className={`${
-                                            selected
-                                              ? "font-semibold"
-                                              : "font-normal"
-                                          } ml-3 block truncate`}
-                                        >
-                                          {model}
-                                        </span>
-                                      </div>
-
-                                      {selected ? (
-                                        <span
-                                          className={`${
-                                            active
-                                              ? "text-white"
-                                              : "text-indigo-600"
-                                          } absolute inset-y-0 right-0 flex items-center pr-4`}
-                                        >
-                                          <CheckIcon
-                                            className="h-5 w-5"
-                                            aria-hidden="true"
-                                          />
-                                        </span>
-                                      ) : null}
-                                    </>
-                                  )}
-                                </Listbox.Option>
-                              ))}
-                            </Listbox.Options>
-                          </Transition>
-                        </div>
-                      </>
-                    )}
-                  </Listbox>
-                </div>
               )}
               {selectedModel && vehicleModels && (
-                <div>
-                  <Listbox value={selectedYear} onChange={setSelectedYear}>
-                    {({ open }) => (
-                      <>
-                        <Listbox.Label className="block text-sm font-medium leading-6 text-slate-700 dark:text-slate-300">
-                          Vehicle Year
-                        </Listbox.Label>
-                        <div className="relative mt-2">
-                          <Listbox.Button className="dark:bg-slate-200 h-10 relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
-                            <span className="flex items-center">
-                              <span className="ml-3 block truncate">
-                                {selectedYear ? selectedYear : ""}
-                              </span>
+                <Listbox value={selectedYear} onChange={setSelectedYear}>
+                  {({ open }) => (
+                    <>
+                      <Listbox.Label className="block text-sm font-medium leading-6 text-slate-700 dark:text-slate-300">
+                        Vehicle Year
+                      </Listbox.Label>
+                      <div className="relative mt-2">
+                        <Listbox.Button className="dark:bg-slate-200 h-10 relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
+                          <span className="flex items-center">
+                            <span className="ml-3 block truncate">
+                              {selectedYear ? selectedYear : ""}
                             </span>
-                            <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                              <ChevronUpDownIcon
-                                className="h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </Listbox.Button>
+                          </span>
+                          <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                            <ChevronUpDownIcon
+                              className="h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </Listbox.Button>
 
-                          <Transition
-                            show={open}
-                            as={Fragment}
-                            leave="transition ease-in duration-100"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                          >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                              {Object.keys(vehicleModels[selectedModel]).map(
-                                (year) => (
-                                  <Listbox.Option
-                                    key={year as Key}
-                                    className={({ active }) =>
-                                      `${
-                                        active
-                                          ? "bg-indigo-600 text-white"
-                                          : "text-gray-900"
-                                      } relative cursor-default select-none py-2 pl-3 pr-9`
-                                    }
-                                    value={year}
-                                  >
-                                    {({ selected, active }) => (
-                                      <>
-                                        <div className="flex items-center">
-                                          <span
-                                            className={`${
-                                              selected
-                                                ? "font-semibold"
-                                                : "font-normal"
-                                            } ml-3 block truncate`}
-                                          >
-                                            {year}
-                                          </span>
-                                        </div>
-
-                                        {selected ? (
-                                          <span
-                                            className={`${
-                                              active
-                                                ? "text-white"
-                                                : "text-indigo-600"
-                                            } absolute inset-y-0 right-0 flex items-center pr-4`}
-                                          >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        ) : null}
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                )
-                              )}
-                            </Listbox.Options>
-                          </Transition>
-                        </div>
-                      </>
-                    )}
-                  </Listbox>
-                </div>
+                        <Transition
+                          show={open}
+                          as={Fragment}
+                          leave="transition ease-in duration-100"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            {Object.keys(vehicleModels[selectedModel]).map(
+                              (year) => (
+                                <DropdownOption
+                                  key={year as Key}
+                                  value={year}
+                                  label={year}
+                                />
+                              )
+                            )}
+                          </Listbox.Options>
+                        </Transition>
+                      </div>
+                    </>
+                  )}
+                </Listbox>
               )}
               <div className="mb-4">
                 <label
@@ -470,16 +356,16 @@ export default function Home() {
                     value={[vehicleEstimate.data.attributes.carbon_kg]}
                     min={0}
                     max={
-                      vehicleEstimate.data.attributes.carbon_kg > AVG_CO2_KG * 2
+                      vehicleEstimate.data.attributes.carbon_kg > AVG_CO2_KG_X2
                         ? vehicleEstimate.data.attributes.carbon_kg
-                        : AVG_CO2_KG * 2
+                        : AVG_CO2_KG_X2
                     }
                   />
                   <div
                     style={{
                       left:
                         vehicleEstimate.data.attributes.carbon_kg >
-                        AVG_CO2_KG * 2
+                        AVG_CO2_KG_X2
                           ? `${Math.round(
                               (AVG_CO2_KG /
                                 vehicleEstimate.data.attributes.carbon_kg) *
