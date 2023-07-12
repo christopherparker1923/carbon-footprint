@@ -10,6 +10,9 @@ import { useState, useEffect, Fragment, Key } from "react";
 import { Listbox, Transition, RadioGroup } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Slider } from "@/components/SliderOut";
+
+// import evergreen from "./../assets/evergreens.jpg";
+
 //import { ArrowUp } from "@SvgList";
 
 // TODO submit hard and fast -> server side error handling in case of API down or similar
@@ -147,13 +150,18 @@ export default function Home() {
   console.log("makes after load:", vehicleMakes);
   console.log("models after load: ", vehicleModels);
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col max-h-full">
       <header className="flex items-center justify-center text-black dark:text-white  w-full h-10 bg-slate-400 dark:bg-slate-900 shadow-md">
         <h1>Carbon Footprint Calculator</h1>
       </header>
-      <main className="flex-grow">
-        <div className="grid grid-cols-1 lg:flex h-full">
-          <div className=" hidden lg:block bg-green-100 dark:bg-green-950 p-4 w-40" />
+      <main className="flex-grow max-h-full">
+        <img
+          className="background-float"
+          src="https://images.unsplash.com/photo-1524100880052-104a85d5ab82?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+          alt="an evergreen forest"
+        />
+        <div className="grid grid-cols-1 lg:flex h-full ">
+          <div className=" hidden lg:block bg-transparent p-4 w-40" />
           <div className="bg-green-50 dark:bg-slate-800 p-4 flex-grow">
             <form
               className="bg-transparent rounded px-8 pt-6 pb-8 mb-4"
@@ -492,8 +500,9 @@ export default function Home() {
               Interface
             </p>
           </div>
-          <div className="hidden lg:block bg-green-100 dark:bg-green-950 p-4 w-40" />
+          <div className="hidden lg:block bg-transparent p-4 w-40" />
         </div>
+        {/* </image> */}
       </main>
     </div>
   );
